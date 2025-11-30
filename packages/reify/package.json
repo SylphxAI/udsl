@@ -1,7 +1,7 @@
 {
-	"name": "@sylphx/udsl",
+	"name": "@sylphx/reify",
 	"version": "0.1.0",
-	"description": "UDSL - Mutations as Data. Describe operations once, execute anywhere with plugins.",
+	"description": "Reify - Reified mutations with pluggable interpreters. Describe once, execute anywhere.",
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -18,6 +18,7 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"keywords": [
+		"reify",
 		"mutation",
 		"pipeline",
 		"plugin",
@@ -30,12 +31,12 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/SylphxAI/udsl.git"
+		"url": "https://github.com/SylphxAI/reify.git"
 	},
 	"dependencies": {
-		"@sylphx/udsl-core": "file:../core",
-		"@sylphx/udsl-entity": "file:../entity",
-		"@sylphx/udsl-adapter-cache": "file:../adapter-cache",
-		"@sylphx/udsl-adapter-prisma": "file:../adapter-prisma"
+		"@sylphx/reify-core": "file:../core",
+		"@sylphx/reify-entity": "file:../entity",
+		"@sylphx/reify-adapter-cache": "file:../adapter-cache",
+		"@sylphx/reify-adapter-prisma": "file:../adapter-prisma"
 	}
 }

@@ -1,7 +1,7 @@
 {
-	"name": "@sylphx/udsl-adapter-cache",
+	"name": "@sylphx/reify-adapter-cache",
 	"version": "0.1.0",
-	"description": "UDSL Cache Adapter - Execute entity operations against in-memory cache",
+	"description": "Reify Cache Adapter - Execute entity operations against in-memory cache",
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -17,10 +17,10 @@
 		"test": "bun test",
 		"typecheck": "tsc --noEmit"
 	},
-	"keywords": ["udsl", "cache", "adapter", "optimistic"],
+	"keywords": ["reify", "cache", "adapter", "optimistic"],
 	"author": "Sylphx",
 	"license": "MIT",
 	"dependencies": {
-		"@sylphx/udsl-core": "file:../core"
+		"@sylphx/reify-core": "file:../core"
 	}
 }

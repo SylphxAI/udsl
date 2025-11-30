@@ -1,7 +1,7 @@
 /**
- * @sylphx/udsl-core
+ * @sylphx/reify-core
  *
- * Domain-agnostic DSL primitives.
+ * Domain-agnostic primitives for reified operations.
  * Use with domain plugins (entity, email, etc.) for actual operations.
  */
 

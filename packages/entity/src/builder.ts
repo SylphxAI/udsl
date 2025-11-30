@@ -4,7 +4,7 @@
  * Fluent API for entity CRUD operations.
  */
 
-import { op, type StepBuilder } from "@sylphx/udsl-core";
+import { op, type StepBuilder } from "@sylphx/reify-core";
 
 interface OperationBuilder extends StepBuilder {
 	as(name: string): OperationBuilder;

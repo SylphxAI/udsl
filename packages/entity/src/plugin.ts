@@ -5,7 +5,7 @@
  * Use adapter plugins for actual execution.
  */
 
-import type { EvalContext, Plugin } from "@sylphx/udsl-core";
+import type { EvalContext, Plugin } from "@sylphx/reify-core";
 
 /** Entity create args */
 export interface CreateArgs {

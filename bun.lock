@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "@sylphx/udsl",
+      "name": "@sylphx/reify-monorepo",
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
         "@types/bun": "^1.2.17",
@@ -11,38 +11,38 @@
       },
     },
     "packages/adapter-cache": {
-      "name": "@sylphx/udsl-adapter-cache",
+      "name": "@sylphx/reify-adapter-cache",
       "version": "0.1.0",
       "dependencies": {
-        "@sylphx/udsl-core": "workspace:*",
+        "@sylphx/reify-core": "file:../core",
       },
     },
     "packages/adapter-prisma": {
-      "name": "@sylphx/udsl-adapter-prisma",
+      "name": "@sylphx/reify-adapter-prisma",
       "version": "0.1.0",
       "dependencies": {
-        "@sylphx/udsl-core": "workspace:*",
+        "@sylphx/reify-core": "file:../core",
       },
     },
     "packages/core": {
-      "name": "@sylphx/udsl-core",
+      "name": "@sylphx/reify-core",
       "version": "0.1.0",
     },
     "packages/entity": {
-      "name": "@sylphx/udsl-entity",
+      "name": "@sylphx/reify-entity",
       "version": "0.1.0",
       "dependencies": {
-        "@sylphx/udsl-core": "workspace:*",
+        "@sylphx/reify-core": "file:../core",
       },
     },
-    "packages/udsl": {
-      "name": "@sylphx/udsl",
+    "packages/reify": {
+      "name": "@sylphx/reify",
       "version": "0.1.0",
       "dependencies": {
-        "@sylphx/udsl-adapter-cache": "workspace:*",
-        "@sylphx/udsl-adapter-prisma": "workspace:*",
-        "@sylphx/udsl-core": "workspace:*",
-        "@sylphx/udsl-entity": "workspace:*",
+        "@sylphx/reify-adapter-cache": "file:../adapter-cache",
+        "@sylphx/reify-adapter-prisma": "file:../adapter-prisma",
+        "@sylphx/reify-core": "file:../core",
+        "@sylphx/reify-entity": "file:../entity",
       },
     },
   },
@@ -65,15 +65,15 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@1.9.4", "", { "os": "win32", "cpu": "x64" }, "sha512-8Y5wMhVIPaWe6jw2H+KlEm4wP/f7EW3810ZLmDlrEEy5KvBsb9ECEfu/kMWD484ijfQ8+nIi0giMgu9g1UAuuA=="],
 
-    "@sylphx/udsl": ["@sylphx/udsl@workspace:packages/udsl"],
+    "@sylphx/reify": ["@sylphx/reify@workspace:packages/reify"],
 
-    "@sylphx/udsl-adapter-cache": ["@sylphx/udsl-adapter-cache@workspace:packages/adapter-cache"],
+    "@sylphx/reify-adapter-cache": ["@sylphx/reify-adapter-cache@workspace:packages/adapter-cache"],
 
-    "@sylphx/udsl-adapter-prisma": ["@sylphx/udsl-adapter-prisma@workspace:packages/adapter-prisma"],
+    "@sylphx/reify-adapter-prisma": ["@sylphx/reify-adapter-prisma@workspace:packages/adapter-prisma"],
 
-    "@sylphx/udsl-core": ["@sylphx/udsl-core@workspace:packages/core"],
+    "@sylphx/reify-core": ["@sylphx/reify-core@workspace:packages/core"],
 
-    "@sylphx/udsl-entity": ["@sylphx/udsl-entity@workspace:packages/entity"],
+    "@sylphx/reify-entity": ["@sylphx/reify-entity@workspace:packages/entity"],
 
     "@types/bun": ["@types/bun@1.3.3", "", { "dependencies": { "bun-types": "1.3.3" } }, "sha512-ogrKbJ2X5N0kWLLFKeytG0eHDleBYtngtlbu9cyBKFtNL3cnpDZkNdQj8flVf6WTZUX5ulI9AY1oa7ljhSrp+g=="],
 
@@ -84,5 +84,13 @@
     "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "undici-types": ["undici-types@7.16.0", "", {}, "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="],
+
+    "@sylphx/reify/@sylphx/reify-core": ["@sylphx/reify-core@file:packages/core", {}],
+
+    "@sylphx/reify-adapter-cache/@sylphx/reify-core": ["@sylphx/reify-core@file:packages/core", {}],
+
+    "@sylphx/reify-adapter-prisma/@sylphx/reify-core": ["@sylphx/reify-core@file:packages/core", {}],
+
+    "@sylphx/reify-entity/@sylphx/reify-core": ["@sylphx/reify-core@file:packages/core", {}],
   }
 }

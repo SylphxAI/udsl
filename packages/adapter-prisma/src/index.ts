@@ -1,14 +1,14 @@
 /**
- * @sylphx/udsl-adapter-prisma
+ * @sylphx/reify-adapter-prisma
  *
- * Prisma Adapter for UDSL - Execute entity operations against Prisma.
+ * Prisma Adapter for Reify - Execute entity operations against Prisma.
  *
  * @example
  * ```typescript
  * import { PrismaClient } from "@prisma/client";
- * import { createPrismaPlugin } from "@sylphx/udsl-adapter-prisma";
- * import { registerPlugin, execute } from "@sylphx/udsl-core";
- * import { entity } from "@sylphx/udsl-entity";
+ * import { createPrismaPlugin } from "@sylphx/reify-adapter-prisma";
+ * import { registerPlugin, execute } from "@sylphx/reify-core";
+ * import { entity } from "@sylphx/reify-entity";
  *
  * const prisma = new PrismaClient();
  * registerPlugin(createPrismaPlugin(prisma));
@@ -22,7 +22,7 @@
  * ```
  */
 
-import type { EvalContext, Plugin } from "@sylphx/udsl-core";
+import type { EvalContext, Plugin } from "@sylphx/reify-core";
 
 /** Minimal Prisma client interface */
 export interface PrismaLike {

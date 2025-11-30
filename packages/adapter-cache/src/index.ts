@@ -1,14 +1,14 @@
 /**
- * @sylphx/udsl-adapter-cache
+ * @sylphx/reify-adapter-cache
  *
- * Cache Adapter for UDSL - Execute entity operations against in-memory cache.
+ * Cache Adapter for Reify - Execute entity operations against in-memory cache.
  * Perfect for client-side optimistic updates.
  *
  * @example
  * ```typescript
- * import { createCachePlugin } from "@sylphx/udsl-adapter-cache";
- * import { registerPlugin, execute } from "@sylphx/udsl-core";
- * import { entity } from "@sylphx/udsl-entity";
+ * import { createCachePlugin } from "@sylphx/reify-adapter-cache";
+ * import { registerPlugin, execute } from "@sylphx/reify-core";
+ * import { entity } from "@sylphx/reify-entity";
  *
  * const cache = new Map();
  * registerPlugin(createCachePlugin(cache));
@@ -22,7 +22,7 @@
  * ```
  */
 
-import type { EvalContext, Plugin } from "@sylphx/udsl-core";
+import type { EvalContext, Plugin } from "@sylphx/reify-core";
 
 /** Minimal cache interface */
 export interface CacheLike {
@@ -120,7 +120,7 @@ function resolveData(data: Record<string, unknown>, ctx: EvalContext): Record<st
 	return resolved;
 }
 
-/** Apply UDSL operators to existing entity */
+/** Apply Reify operators to existing entity */
 function applyOperators(
 	existing: Record<string, unknown>,
 	updates: Record<string, unknown>,

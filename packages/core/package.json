@@ -1,7 +1,7 @@
 {
-	"name": "@sylphx/udsl-core",
+	"name": "@sylphx/reify-core",
 	"version": "0.1.0",
-	"description": "UDSL Core - Domain-agnostic DSL primitives",
+	"description": "Reify Core - Reified operations with pluggable interpreters",
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -17,7 +17,7 @@
 		"test": "bun test",
 		"typecheck": "tsc --noEmit"
 	},
-	"keywords": ["udsl", "dsl", "pipeline", "plugin", "type-safe", "serializable"],
+	"keywords": ["reify", "dsl", "pipeline", "plugin", "type-safe", "serializable", "effect"],
 	"author": "Sylphx",
 	"license": "MIT"
 }

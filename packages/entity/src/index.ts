@@ -1,7 +1,7 @@
 /**
- * @sylphx/udsl-entity
+ * @sylphx/reify-entity
  *
- * Entity domain for UDSL - CRUD operations for entities.
+ * Entity domain for Reify - CRUD operations for entities.
  */
 
 // Builder

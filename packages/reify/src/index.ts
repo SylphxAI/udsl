@@ -1,14 +1,14 @@
 /**
- * UDSL - Mutations as Data
+ * Reify - Reified Mutations
  *
  * Describe operations once, execute anywhere with plugins.
  *
  * This is the convenience package that re-exports everything.
  * For fine-grained control, use individual packages:
- * - @sylphx/udsl-core - Core types, builder, evaluator
- * - @sylphx/udsl-entity - Entity domain (CRUD operations)
- * - @sylphx/udsl-adapter-cache - Cache adapter
- * - @sylphx/udsl-adapter-prisma - Prisma adapter
+ * - @sylphx/reify-core - Core types, builder, evaluator
+ * - @sylphx/reify-entity - Entity domain (CRUD operations)
+ * - @sylphx/reify-adapter-cache - Cache adapter
+ * - @sylphx/reify-adapter-prisma - Prisma adapter
  */
 
 // =============================================================================
@@ -48,7 +48,7 @@ export type {
 	ConditionalResult,
 	StepResult,
 	PipelineResult,
-} from "@sylphx/udsl-core";
+} from "@sylphx/reify-core";
 
 export {
 	// Type guards
@@ -99,21 +99,21 @@ export {
 	resetTempIdCounter,
 	// Errors
 	EvaluationError,
-} from "@sylphx/udsl-core";
+} from "@sylphx/reify-core";
 
 // =============================================================================
 // Entity Domain
 // =============================================================================
 
-export { entity, entityPlugin } from "@sylphx/udsl-entity";
-export type { CreateArgs, UpdateArgs, DeleteArgs, UpsertArgs } from "@sylphx/udsl-entity";
+export { entity, entityPlugin } from "@sylphx/reify-entity";
+export type { CreateArgs, UpdateArgs, DeleteArgs, UpsertArgs } from "@sylphx/reify-entity";
 
 // =============================================================================
 // Adapters
 // =============================================================================
 
-export { createCachePlugin } from "@sylphx/udsl-adapter-cache";
-export type { CacheLike, CachePluginOptions } from "@sylphx/udsl-adapter-cache";
+export { createCachePlugin } from "@sylphx/reify-adapter-cache";
+export type { CacheLike, CachePluginOptions } from "@sylphx/reify-adapter-cache";
 
-export { createPrismaPlugin } from "@sylphx/udsl-adapter-prisma";
-export type { PrismaLike, PrismaPluginOptions } from "@sylphx/udsl-adapter-prisma";
+export { createPrismaPlugin } from "@sylphx/reify-adapter-prisma";
+export type { PrismaLike, PrismaPluginOptions } from "@sylphx/reify-adapter-prisma";
