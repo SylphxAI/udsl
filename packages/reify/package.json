@@ -34,9 +34,9 @@
 		"url": "https://github.com/SylphxAI/reify.git"
 	},
 	"dependencies": {
-		"@sylphx/reify-core": "file:../core",
-		"@sylphx/reify-entity": "file:../entity",
-		"@sylphx/reify-adapter-cache": "file:../adapter-cache",
-		"@sylphx/reify-adapter-prisma": "file:../adapter-prisma"
+		"@sylphx/reify-core": "workspace:*",
+		"@sylphx/reify-entity": "workspace:*",
+		"@sylphx/reify-adapter-cache": "workspace:*",
+		"@sylphx/reify-adapter-prisma": "workspace:*"
 	}
 }

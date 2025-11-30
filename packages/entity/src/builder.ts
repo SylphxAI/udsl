@@ -15,54 +15,14 @@ import {
 	type RefProxy,
 	type Operator,
 } from "@sylphx/reify-core";
+import { type StandardEntity, isStandardEntity } from "@sylphx/standard-entity";
+
+// Re-export for convenience
+export { type StandardEntity, isStandardEntity } from "@sylphx/standard-entity";
 
 // =============================================================================
-// Standard Entity Protocol
+// Type Inference Helpers
 // =============================================================================
-
-/**
- * Standard Entity Protocol
- *
- * Any library can implement this interface to enable type-safe entity operations.
- * Similar to Standard Schema pattern - structural typing without direct imports.
- *
- * The protocol supports two ways to provide type information:
- * 1. Direct `type` property with the data type (simple)
- * 2. `fields` property that can be used to infer the type (Lens-style)
- *
- * @example
- * ```typescript
- * // Lens EntityDef implements this with fields
- * interface EntityDef<Name, Fields> {
- *   "~entity": { name: Name; type: unknown };
- *   fields: Fields;
- * }
- *
- * // Now entity.create() is fully typed!
- * entity.create(Message, { content: "hello" })  // ✅ type-checked
- * ```
- */
-export interface StandardEntity<TName extends string = string, TData = unknown> {
-	/** Standard Entity marker with phantom types */
-	readonly "~entity": {
-		/** Entity name */
-		readonly name: TName;
-		/** Entity data type (can be unknown if using fields-based inference) */
-		readonly type: TData;
-	};
-	/** Optional fields for type inference (Lens-style entities) */
-	readonly fields?: unknown;
-}
-
-/** Check if value implements StandardEntity protocol */
-export function isStandardEntity(value: unknown): value is StandardEntity {
-	return (
-		typeof value === "object" &&
-		value !== null &&
-		"~entity" in value &&
-		typeof (value as StandardEntity)["~entity"] === "object"
-	);
-}
 
 /** Extract entity name from StandardEntity or string */
 type EntityName<T> = T extends StandardEntity<infer N, unknown> ? N : T extends string ? T : never;

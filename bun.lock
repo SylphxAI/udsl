@@ -14,14 +14,14 @@
       "name": "@sylphx/reify-adapter-cache",
       "version": "0.1.0",
       "dependencies": {
-        "@sylphx/reify-core": "file:../core",
+        "@sylphx/reify-core": "workspace:*",
       },
     },
     "packages/adapter-prisma": {
       "name": "@sylphx/reify-adapter-prisma",
       "version": "0.1.0",
       "dependencies": {
-        "@sylphx/reify-core": "file:../core",
+        "@sylphx/reify-core": "workspace:*",
       },
     },
     "packages/core": {
@@ -32,18 +32,23 @@
       "name": "@sylphx/reify-entity",
       "version": "0.1.0",
       "dependencies": {
-        "@sylphx/reify-core": "file:../core",
+        "@sylphx/reify-core": "workspace:*",
+        "@sylphx/standard-entity": "workspace:*",
       },
     },
     "packages/reify": {
       "name": "@sylphx/reify",
       "version": "0.1.0",
       "dependencies": {
-        "@sylphx/reify-adapter-cache": "file:../adapter-cache",
-        "@sylphx/reify-adapter-prisma": "file:../adapter-prisma",
-        "@sylphx/reify-core": "file:../core",
-        "@sylphx/reify-entity": "file:../entity",
+        "@sylphx/reify-adapter-cache": "workspace:*",
+        "@sylphx/reify-adapter-prisma": "workspace:*",
+        "@sylphx/reify-core": "workspace:*",
+        "@sylphx/reify-entity": "workspace:*",
       },
+    },
+    "packages/standard-entity": {
+      "name": "@sylphx/standard-entity",
+      "version": "0.1.0",
     },
   },
   "packages": {
@@ -75,6 +80,8 @@
 
     "@sylphx/reify-entity": ["@sylphx/reify-entity@workspace:packages/entity"],
 
+    "@sylphx/standard-entity": ["@sylphx/standard-entity@workspace:packages/standard-entity"],
+
     "@types/bun": ["@types/bun@1.3.3", "", { "dependencies": { "bun-types": "1.3.3" } }, "sha512-ogrKbJ2X5N0kWLLFKeytG0eHDleBYtngtlbu9cyBKFtNL3cnpDZkNdQj8flVf6WTZUX5ulI9AY1oa7ljhSrp+g=="],
 
     "@types/node": ["@types/node@24.10.1", "", { "dependencies": { "undici-types": "~7.16.0" } }, "sha512-GNWcUTRBgIRJD5zj+Tq0fKOJ5XZajIiBroOF0yvj2bSU1WvNdYS/dn9UxwsujGW4JX06dnHyjV2y9rRaybH0iQ=="],
@@ -84,13 +91,5 @@
     "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "undici-types": ["undici-types@7.16.0", "", {}, "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="],
-
-    "@sylphx/reify/@sylphx/reify-core": ["@sylphx/reify-core@file:packages/core", {}],
-
-    "@sylphx/reify-adapter-cache/@sylphx/reify-core": ["@sylphx/reify-core@file:packages/core", {}],
-
-    "@sylphx/reify-adapter-prisma/@sylphx/reify-core": ["@sylphx/reify-core@file:packages/core", {}],
-
-    "@sylphx/reify-entity/@sylphx/reify-core": ["@sylphx/reify-core@file:packages/core", {}],
   }
 }

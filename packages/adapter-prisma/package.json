@@ -21,6 +21,6 @@
 	"author": "Sylphx",
 	"license": "MIT",
 	"dependencies": {
-		"@sylphx/reify-core": "file:../core"
+		"@sylphx/reify-core": "workspace:*"
 	}
 }

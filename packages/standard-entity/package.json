@@ -1,7 +1,7 @@
 {
-	"name": "@sylphx/reify-entity",
+	"name": "@sylphx/standard-entity",
 	"version": "0.1.0",
-	"description": "Reify Entity Domain - CRUD operations for entities",
+	"description": "Standard Entity Protocol - Cross-library type-safe entity operations",
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -14,14 +14,9 @@
 	"files": ["dist"],
 	"scripts": {
 		"build": "tsc",
-		"test": "bun test",
 		"typecheck": "tsc --noEmit"
 	},
-	"keywords": ["reify", "entity", "crud", "domain"],
+	"keywords": ["standard-entity", "entity", "protocol", "type-safe"],
 	"author": "Sylphx",
-	"license": "MIT",
-	"dependencies": {
-		"@sylphx/reify-core": "workspace:*",
-		"@sylphx/standard-entity": "workspace:*"
-	}
+	"license": "MIT"
 }

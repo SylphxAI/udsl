@@ -105,8 +105,8 @@ export {
 // Entity Domain
 // =============================================================================
 
-export { entity, entityPlugin } from "@sylphx/reify-entity";
-export type { CreateArgs, UpdateArgs, DeleteArgs, UpsertArgs } from "@sylphx/reify-entity";
+export { entity, entityPlugin, isStandardEntity } from "@sylphx/reify-entity";
+export type { StandardEntity, CreateArgs, UpdateArgs, DeleteArgs, UpsertArgs } from "@sylphx/reify-entity";
 
 // =============================================================================
 // Adapters
