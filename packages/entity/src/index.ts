@@ -5,7 +5,8 @@
  */
 
 // Builder
-export { entity } from "./builder";
+export { entity, isStandardEntity } from "./builder";
+export type { StandardEntity } from "./builder";
 
 // Plugin
 export { entityPlugin, default } from "./plugin";
