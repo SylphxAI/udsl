@@ -16,104 +16,109 @@
 // =============================================================================
 
 export type {
-	// Value references
-	RefInput,
-	RefResult,
-	RefNow,
-	RefTemp,
-	ValueRef,
-	// Operators
-	OpInc,
-	OpDec,
-	OpPush,
-	OpPull,
-	OpAddToSet,
-	OpDefault,
-	OpIf,
-	Operator,
-	// Core primitives
-	Operation,
 	Conditional,
-	PipelineStep,
-	Pipeline,
+	ConditionalResult,
 	DSL,
 	// Plugin system
 	EffectHandler,
-	Plugin,
 	EvalContext,
-	// Builder
-	StepBuilder,
+	OpAddToSet,
+	OpDec,
+	OpDefault,
+	// Core primitives
+	Operation,
 	// Results
 	OperationResult,
-	ConditionalResult,
-	StepResult,
+	Operator,
+	OpIf,
+	// Operators
+	OpInc,
+	OpPull,
+	OpPush,
+	Pipeline,
 	PipelineResult,
-} from "@sylphx/reify-core";
+	PipelineStep,
+	Plugin,
+	// Value references
+	RefInput,
+	RefNow,
+	RefResult,
+	RefTemp,
+	// Builder
+	StepBuilder,
+	StepResult,
+	ValueRef,
+} from '@sylphx/reify-core'
 
 export {
-	// Type guards
-	isRefInput,
-	isRefResult,
-	isRefNow,
-	isRefTemp,
-	isValueRef,
-	isOperator,
-	isOperation,
-	isConditional,
-	isPipelineStep,
-	isPipeline,
-	isDSL,
-	// Pipeline builder
-	pipe,
-	single,
-	// Operation builder
-	op,
+	addToSet,
 	// Conditional builder
 	branch,
-	// Value references
-	ref,
-	now,
-	temp,
-	// Operators
-	inc,
-	dec,
-	push,
-	pull,
-	addToSet,
-	defaultTo,
-	when,
+	clearPlugins,
 	// Internal
 	createInputProxy,
-	// Plugin registry
-	registerPlugin,
-	unregisterPlugin,
-	clearPlugins,
-	getPluginNamespaces,
-	// Execution
-	execute,
-	executePipeline,
-	executeOperation,
-	executeConditional,
-	// Value resolution
-	resolveValue,
-	resetTempIdCounter,
+	dec,
+	defaultTo,
 	// Errors
 	EvaluationError,
-} from "@sylphx/reify-core";
+	// Execution
+	execute,
+	executeConditional,
+	executeOperation,
+	executePipeline,
+	getPluginNamespaces,
+	// Operators
+	inc,
+	isConditional,
+	isDSL,
+	isOperation,
+	isOperator,
+	isPipeline,
+	isPipelineStep,
+	// Type guards
+	isRefInput,
+	isRefNow,
+	isRefResult,
+	isRefTemp,
+	isValueRef,
+	now,
+	// Operation builder
+	op,
+	// Pipeline builder
+	pipe,
+	pull,
+	push,
+	// Value references
+	ref,
+	// Plugin registry
+	registerPlugin,
+	resetTempIdCounter,
+	// Value resolution
+	resolveValue,
+	single,
+	temp,
+	unregisterPlugin,
+	when,
+} from '@sylphx/reify-core'
 
 // =============================================================================
 // Entity Domain
 // =============================================================================
 
-export { entity, entityPlugin, isStandardEntity } from "@sylphx/reify-entity";
-export type { StandardEntity, CreateArgs, UpdateArgs, DeleteArgs, UpsertArgs } from "@sylphx/reify-entity";
+export type {
+	CreateArgs,
+	DeleteArgs,
+	StandardEntity,
+	UpdateArgs,
+	UpsertArgs,
+} from '@sylphx/reify-entity'
+export { entity, entityPlugin, isStandardEntity } from '@sylphx/reify-entity'
 
 // =============================================================================
 // Adapters
 // =============================================================================
 
-export { createCachePlugin } from "@sylphx/reify-adapter-cache";
-export type { CacheLike, CachePluginOptions } from "@sylphx/reify-adapter-cache";
-
-export { createPrismaPlugin } from "@sylphx/reify-adapter-prisma";
-export type { PrismaLike, PrismaPluginOptions } from "@sylphx/reify-adapter-prisma";
+export type { CacheLike, CachePluginOptions } from '@sylphx/reify-adapter-cache'
+export { createCachePlugin } from '@sylphx/reify-adapter-cache'
+export type { PrismaLike, PrismaPluginOptions } from '@sylphx/reify-adapter-prisma'
+export { createPrismaPlugin } from '@sylphx/reify-adapter-prisma'

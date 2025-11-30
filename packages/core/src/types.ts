@@ -11,26 +11,26 @@
 
 /** Reference to input data: { $input: "path.to.field" } */
 export interface RefInput {
-	$input: string;
+	$input: string
 }
 
 /** Reference to a named result: { $ref: "resultName.field" } */
 export interface RefResult {
-	$ref: string;
+	$ref: string
 }
 
 /** Current timestamp: { $now: true } */
 export interface RefNow {
-	$now: true;
+	$now: true
 }
 
 /** Generate temporary ID: { $temp: true } */
 export interface RefTemp {
-	$temp: true;
+	$temp: true
 }
 
 /** Any value reference */
-export type ValueRef = RefInput | RefResult | RefNow | RefTemp;
+export type ValueRef = RefInput | RefResult | RefNow | RefTemp
 
 // =============================================================================
 // Operators - Transform values inline
@@ -38,45 +38,45 @@ export type ValueRef = RefInput | RefResult | RefNow | RefTemp;
 
 /** Increment number: { $inc: 1 } */
 export interface OpInc {
-	$inc: number;
+	$inc: number
 }
 
 /** Decrement number: { $dec: 1 } */
 export interface OpDec {
-	$dec: number;
+	$dec: number
 }
 
 /** Push to array: { $push: value } */
 export interface OpPush {
-	$push: unknown;
+	$push: unknown
 }
 
 /** Pull from array: { $pull: value } */
 export interface OpPull {
-	$pull: unknown;
+	$pull: unknown
 }
 
 /** Add to set: { $addToSet: value } */
 export interface OpAddToSet {
-	$addToSet: unknown;
+	$addToSet: unknown
 }
 
 /** Default value if undefined: { $default: value } */
 export interface OpDefault {
-	$default: unknown;
+	$default: unknown
 }
 
 /** Conditional value: { $if: { cond, then, else? } } */
 export interface OpIf {
 	$if: {
-		cond: unknown;
-		then: unknown;
-		else?: unknown;
-	};
+		cond: unknown
+		then: unknown
+		else?: unknown
+	}
 }
 
 /** Any operator */
-export type Operator = OpInc | OpDec | OpPush | OpPull | OpAddToSet | OpDefault | OpIf;
+export type Operator = OpInc | OpDec | OpPush | OpPull | OpAddToSet | OpDefault | OpIf
 
 // =============================================================================
 // Core Primitives - Operation and Pipeline
@@ -97,13 +97,13 @@ export type Operator = OpInc | OpDec | OpPush | OpPull | OpAddToSet | OpDefault 
  */
 export interface Operation {
 	/** Effect to execute (namespaced, e.g., "entity.create", "http.post") */
-	$do: string;
+	$do: string
 	/** Arguments for the effect */
-	$with?: Record<string, unknown>;
+	$with?: Record<string, unknown>
 	/** Name this result for later $ref */
-	$as?: string;
+	$as?: string
 	/** Only execute if condition is truthy (skip otherwise) */
-	$only?: unknown;
+	$only?: unknown
 }
 
 /**
@@ -121,30 +121,30 @@ export interface Operation {
  */
 export interface Conditional {
 	/** Condition to evaluate */
-	$when: unknown;
+	$when: unknown
 	/** Execute if condition is truthy (single step or array, supports nesting) */
-	$then: PipelineStep | PipelineStep[];
+	$then: PipelineStep | PipelineStep[]
 	/** Execute if condition is falsy (single step or array, supports nesting) */
-	$else?: PipelineStep | PipelineStep[];
+	$else?: PipelineStep | PipelineStep[]
 	/** Name the result for later $ref */
-	$as?: string;
+	$as?: string
 }
 
 /** Any pipeline step (operation or conditional) */
-export type PipelineStep = Operation | Conditional;
+export type PipelineStep = Operation | Conditional
 
 /**
  * Pipeline - Sequence of operations
  */
 export interface Pipeline {
 	/** Ordered list of operations and conditionals */
-	$pipe: PipelineStep[];
+	$pipe: PipelineStep[]
 	/** What to return from the pipeline */
-	$return?: Record<string, unknown>;
+	$return?: Record<string, unknown>
 }
 
 /** DSL can be a single operation, conditional, or pipeline */
-export type DSL = Operation | Conditional | Pipeline;
+export type DSL = Operation | Conditional | Pipeline
 
 // =============================================================================
 // Plugin System
@@ -153,29 +153,29 @@ export type DSL = Operation | Conditional | Pipeline;
 /** Effect handler function */
 export type EffectHandler<TArgs = Record<string, unknown>, TResult = unknown> = (
 	args: TArgs,
-	ctx: EvalContext,
-) => TResult | Promise<TResult>;
+	ctx: EvalContext
+) => TResult | Promise<TResult>
 
 /** Plugin definition */
 export interface Plugin {
 	/** Plugin namespace (e.g., "entity", "http", "email") */
-	namespace: string;
+	namespace: string
 	/** Effect handlers */
-	effects: Record<string, EffectHandler>;
+	effects: Record<string, EffectHandler>
 }
 
 /** Evaluation context passed to effect handlers */
 export interface EvalContext {
 	/** Input data */
-	input: Record<string, unknown>;
+	input: Record<string, unknown>
 	/** Results from previous operations */
-	results: Record<string, unknown>;
+	results: Record<string, unknown>
 	/** Current timestamp */
-	now?: Date;
+	now?: Date
 	/** Temp ID generator */
-	tempId?: () => string;
+	tempId?: () => string
 	/** Resolve a value (handles $input, $ref, etc.) */
-	resolve: (value: unknown) => unknown;
+	resolve: (value: unknown) => unknown
 }
 
 // =============================================================================
@@ -183,54 +183,54 @@ export interface EvalContext {
 // =============================================================================
 
 export function isRefInput(v: unknown): v is RefInput {
-	return typeof v === "object" && v !== null && "$input" in v;
+	return typeof v === 'object' && v !== null && '$input' in v
 }
 
 export function isRefResult(v: unknown): v is RefResult {
-	return typeof v === "object" && v !== null && "$ref" in v;
+	return typeof v === 'object' && v !== null && '$ref' in v
 }
 
 export function isRefNow(v: unknown): v is RefNow {
-	return typeof v === "object" && v !== null && "$now" in v;
+	return typeof v === 'object' && v !== null && '$now' in v
 }
 
 export function isRefTemp(v: unknown): v is RefTemp {
-	return typeof v === "object" && v !== null && "$temp" in v;
+	return typeof v === 'object' && v !== null && '$temp' in v
 }
 
 export function isValueRef(v: unknown): v is ValueRef {
-	return isRefInput(v) || isRefResult(v) || isRefNow(v) || isRefTemp(v);
+	return isRefInput(v) || isRefResult(v) || isRefNow(v) || isRefTemp(v)
 }
 
 export function isOperator(v: unknown): v is Operator {
-	if (typeof v !== "object" || v === null) return false;
+	if (typeof v !== 'object' || v === null) return false
 	return (
-		"$inc" in v ||
-		"$dec" in v ||
-		"$push" in v ||
-		"$pull" in v ||
-		"$addToSet" in v ||
-		"$default" in v ||
-		"$if" in v
-	);
+		'$inc' in v ||
+		'$dec' in v ||
+		'$push' in v ||
+		'$pull' in v ||
+		'$addToSet' in v ||
+		'$default' in v ||
+		'$if' in v
+	)
 }
 
 export function isOperation(v: unknown): v is Operation {
-	return typeof v === "object" && v !== null && "$do" in v;
+	return typeof v === 'object' && v !== null && '$do' in v
 }
 
 export function isConditional(v: unknown): v is Conditional {
-	return typeof v === "object" && v !== null && "$when" in v && "$then" in v;
+	return typeof v === 'object' && v !== null && '$when' in v && '$then' in v
 }
 
 export function isPipelineStep(v: unknown): v is PipelineStep {
-	return isOperation(v) || isConditional(v);
+	return isOperation(v) || isConditional(v)
 }
 
 export function isPipeline(v: unknown): v is Pipeline {
-	return typeof v === "object" && v !== null && "$pipe" in v && Array.isArray((v as Pipeline).$pipe);
+	return typeof v === 'object' && v !== null && '$pipe' in v && Array.isArray((v as Pipeline).$pipe)
 }
 
 export function isDSL(v: unknown): v is DSL {
-	return isOperation(v) || isConditional(v) || isPipeline(v);
+	return isOperation(v) || isConditional(v) || isPipeline(v)
 }

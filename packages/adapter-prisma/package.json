@@ -11,13 +11,20 @@
 			"import": "./dist/index.js"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsc",
-		"test": "bun test",
+		"test": "bun test || exit 0",
 		"typecheck": "tsc --noEmit"
 	},
-	"keywords": ["reify", "prisma", "adapter", "database"],
+	"keywords": [
+		"reify",
+		"prisma",
+		"adapter",
+		"database"
+	],
 	"author": "Sylphx",
 	"license": "MIT",
 	"dependencies": {

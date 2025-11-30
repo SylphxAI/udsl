@@ -6,53 +6,56 @@
  */
 
 import {
-	op,
-	type StepBuilder,
-	type RefTemp,
-	type RefNow,
-	type RefInput,
-	type RefResult,
-	type RefProxy,
 	type Operator,
-} from "@sylphx/reify-core";
-import { type StandardEntity, isStandardEntity } from "@sylphx/standard-entity";
+	op,
+	type RefInput,
+	type RefNow,
+	type RefProxy,
+	type RefResult,
+	type RefTemp,
+	type StepBuilder,
+} from '@sylphx/reify-core'
+import type { StandardEntity } from '@sylphx/standard-entity'
 
 // Re-export for convenience
-export { type StandardEntity, isStandardEntity } from "@sylphx/standard-entity";
+export { isStandardEntity, type StandardEntity } from '@sylphx/standard-entity'
 
 // =============================================================================
 // Type Inference Helpers
 // =============================================================================
 
 /** Extract entity name from StandardEntity or string */
-type EntityName<T> = T extends StandardEntity<infer N, unknown> ? N : T extends string ? T : never;
+type _EntityName<T> = T extends StandardEntity<infer N, unknown> ? N : T extends string ? T : never
 
 /**
  * Infer scalar type from Lens field definition.
  * Supports common Lens field types.
  */
-type InferLensScalar<F> = F extends { _type: "id" | "string" }
+type InferLensScalar<F> = F extends { _type: 'id' | 'string' }
 	? string
-	: F extends { _type: "int" | "float" | "decimal" }
+	: F extends { _type: 'int' | 'float' | 'decimal' }
 		? number
-		: F extends { _type: "boolean" }
+		: F extends { _type: 'boolean' }
 			? boolean
-			: F extends { _type: "datetime" | "date" }
+			: F extends { _type: 'datetime' | 'date' }
 				? Date
-				: F extends { _type: "enum"; values: readonly (infer V)[] }
+				: F extends { _type: 'enum'; values: readonly (infer V)[] }
 					? V
 					: F extends { _optional: true; _inner: infer I }
 						? InferLensScalar<I> | undefined
-						: unknown;
+						: unknown
 
 /**
  * Infer entity data type from Lens-style fields.
  */
-type InferFromLensFields<F> = F extends Record<string, unknown>
-	? {
-			[K in keyof F as F[K] extends { _type: string } | { _optional: true } ? K : never]: InferLensScalar<F[K]>;
-		}
-	: Record<string, unknown>;
+type InferFromLensFields<F> =
+	F extends Record<string, unknown>
+		? {
+				[K in keyof F as F[K] extends { _type: string } | { _optional: true }
+					? K
+					: never]: InferLensScalar<F[K]>
+			}
+		: Record<string, unknown>
 
 /**
  * Extract raw entity data type from StandardEntity.
@@ -64,37 +67,37 @@ type RawEntityData<T> = T extends { fields: infer F }
 		? D extends unknown
 			? Record<string, unknown>
 			: D
-		: Record<string, unknown>;
+		: Record<string, unknown>
 
 // =============================================================================
 // DSL Value Types - Allow DSL references in place of actual values
 // =============================================================================
 
 /** Any DSL reference type that can be used in place of actual values */
-type AnyDslRef = RefTemp | RefNow | RefInput | RefResult | RefProxy | Operator;
+type AnyDslRef = RefTemp | RefNow | RefInput | RefResult | RefProxy | Operator
 
 /**
  * Allow either the actual type T or any DSL reference.
  */
-type WithDsl<T> = T | AnyDslRef;
+type WithDsl<T> = T | AnyDslRef
 
 /**
  * Transform entity data to allow DSL references for each property.
  */
 type DslifyData<T> = {
-	[K in keyof T]: WithDsl<T[K]>;
-};
+	[K in keyof T]: WithDsl<T[K]>
+}
 
 /**
  * Entity data with DSL support.
  * Each field can be either its actual type or a DSL reference.
  */
-type EntityData<T> = DslifyData<RawEntityData<T>>;
+type EntityData<T> = DslifyData<RawEntityData<T>>
 
 /** Get entity name at runtime */
 function getEntityName<T extends string | StandardEntity>(entity: T): string {
-	if (typeof entity === "string") return entity;
-	return (entity as StandardEntity)["~entity"].name;
+	if (typeof entity === 'string') return entity
+	return (entity as StandardEntity)['~entity'].name
 }
 
 // =============================================================================
@@ -102,8 +105,8 @@ function getEntityName<T extends string | StandardEntity>(entity: T): string {
 // =============================================================================
 
 interface OperationBuilder extends StepBuilder {
-	as(name: string): OperationBuilder;
-	only(condition: unknown): OperationBuilder;
+	as(name: string): OperationBuilder
+	only(condition: unknown): OperationBuilder
 }
 
 // =============================================================================
@@ -136,10 +139,10 @@ export const entity = {
 	 */
 	create<T extends string | StandardEntity>(
 		typeOrEntity: T,
-		data: Partial<EntityData<T>> = {},
+		data: Partial<EntityData<T>> = {}
 	): OperationBuilder {
-		const type = getEntityName(typeOrEntity);
-		return op("entity.create", { type, ...data }) as OperationBuilder;
+		const type = getEntityName(typeOrEntity)
+		return op('entity.create', { type, ...data }) as OperationBuilder
 	},
 
 	/**
@@ -153,10 +156,10 @@ export const entity = {
 	 */
 	update<T extends string | StandardEntity>(
 		typeOrEntity: T,
-		data: Partial<EntityData<T>> & { id: unknown },
+		data: Partial<EntityData<T>> & { id: unknown }
 	): OperationBuilder {
-		const type = getEntityName(typeOrEntity);
-		return op("entity.update", { type, ...data }) as OperationBuilder;
+		const type = getEntityName(typeOrEntity)
+		return op('entity.update', { type, ...data }) as OperationBuilder
 	},
 
 	/**
@@ -169,8 +172,8 @@ export const entity = {
 	 * ```
 	 */
 	delete<T extends string | StandardEntity>(typeOrEntity: T, id: unknown): OperationBuilder {
-		const type = getEntityName(typeOrEntity);
-		return op("entity.delete", { type, id }) as OperationBuilder;
+		const type = getEntityName(typeOrEntity)
+		return op('entity.delete', { type, id }) as OperationBuilder
 	},
 
 	/**
@@ -184,9 +187,9 @@ export const entity = {
 	 */
 	upsert<T extends string | StandardEntity>(
 		typeOrEntity: T,
-		data: Partial<EntityData<T>> & { id: unknown },
+		data: Partial<EntityData<T>> & { id: unknown }
 	): OperationBuilder {
-		const type = getEntityName(typeOrEntity);
-		return op("entity.upsert", { type, ...data }) as OperationBuilder;
+		const type = getEntityName(typeOrEntity)
+		return op('entity.upsert', { type, ...data }) as OperationBuilder
 	},
-};
+}

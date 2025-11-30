@@ -10,97 +10,96 @@
 // =============================================================================
 
 export type {
-	// Value references
-	RefInput,
-	RefResult,
-	RefNow,
-	RefTemp,
-	ValueRef,
-	// Operators
-	OpInc,
-	OpDec,
-	OpPush,
-	OpPull,
-	OpAddToSet,
-	OpDefault,
-	OpIf,
-	Operator,
-	// Core primitives
-	Operation,
 	Conditional,
-	PipelineStep,
-	Pipeline,
 	DSL,
 	// Plugin system
 	EffectHandler,
-	Plugin,
 	EvalContext,
-} from "./types";
+	OpAddToSet,
+	OpDec,
+	OpDefault,
+	// Core primitives
+	Operation,
+	Operator,
+	OpIf,
+	// Operators
+	OpInc,
+	OpPull,
+	OpPush,
+	Pipeline,
+	PipelineStep,
+	Plugin,
+	// Value references
+	RefInput,
+	RefNow,
+	RefResult,
+	RefTemp,
+	ValueRef,
+} from './types'
 
 // Type guards
 export {
+	isConditional,
+	isDSL,
+	isOperation,
+	isOperator,
+	isPipeline,
+	isPipelineStep,
 	isRefInput,
-	isRefResult,
 	isRefNow,
+	isRefResult,
 	isRefTemp,
 	isValueRef,
-	isOperator,
-	isOperation,
-	isConditional,
-	isPipelineStep,
-	isPipeline,
-	isDSL,
-} from "./types";
+} from './types'
 
 // =============================================================================
 // Builder
 // =============================================================================
 
+export type { RefProxy, StepBuilder } from './builder'
 export {
-	// Pipeline builder
-	pipe,
-	single,
-	// Operation builder
-	op,
+	addToSet,
 	// Conditional builder
 	branch,
-	// Value references
-	ref,
-	now,
-	temp,
-	// Operators
-	inc,
-	dec,
-	push,
-	pull,
-	addToSet,
-	defaultTo,
-	when,
 	// Internal
 	createInputProxy,
-} from "./builder";
-
-export type { StepBuilder, RefProxy } from "./builder";
+	dec,
+	defaultTo,
+	// Operators
+	inc,
+	now,
+	// Operation builder
+	op,
+	// Pipeline builder
+	pipe,
+	pull,
+	push,
+	// Value references
+	ref,
+	single,
+	temp,
+	when,
+} from './builder'
 
 // =============================================================================
 // Evaluator
 // =============================================================================
 
-export type { OperationResult, ConditionalResult, StepResult, PipelineResult } from "./evaluator";
+export type { ConditionalResult, OperationResult, PipelineResult, StepResult } from './evaluator'
 export {
-	// Plugin registry
-	registerPlugin,
-	unregisterPlugin,
 	clearPlugins,
-	getPluginNamespaces,
-	// Execution
-	execute,
-	executePipeline,
-	executeOperation,
-	executeConditional,
-	// Value resolution
-	resolveValue,
-	resetTempIdCounter,
 	// Errors
 	EvaluationError,
-} from "./evaluator";
+	// Execution
+	execute,
+	executeConditional,
+	executeOperation,
+	executePipeline,
+	getPluginNamespaces,
+	// Plugin registry
+	registerPlugin,
+	resetTempIdCounter,
+	// Value resolution
+	resolveValue,
+	unregisterPlugin,
+} from './evaluator'

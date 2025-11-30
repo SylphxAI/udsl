@@ -235,6 +235,12 @@ await db.operations.insert({ data: pipeline });
 ws.send(JSON.stringify({ type: 'mutation', pipeline }));
 ```
 
+## Powered by Sylphx
+
+Built with [@sylphx/tsconfig](https://github.com/SylphxAI/tsconfig), [@sylphx/biome-config](https://github.com/SylphxAI/biome-config), [@sylphx/doctor](https://github.com/SylphxAI/doctor), and [@sylphx/bump](https://github.com/SylphxAI/bump).
+
+https://github.com/SylphxAI
+
 ## License
 
 MIT

@@ -4,10 +4,9 @@
  * Entity domain for Reify - CRUD operations for entities.
  */
 
+export type { StandardEntity } from './builder'
 // Builder
-export { entity, isStandardEntity } from "./builder";
-export type { StandardEntity } from "./builder";
-
+export { entity, isStandardEntity } from './builder'
+export type { CreateArgs, DeleteArgs, UpdateArgs, UpsertArgs } from './plugin'
 // Plugin
-export { entityPlugin, default } from "./plugin";
-export type { CreateArgs, UpdateArgs, DeleteArgs, UpsertArgs } from "./plugin";
+export { default, entityPlugin } from './plugin'

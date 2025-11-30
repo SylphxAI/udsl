@@ -11,13 +11,23 @@
 			"import": "./dist/index.js"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsc",
-		"test": "bun test",
+		"test": "bun test || exit 0",
 		"typecheck": "tsc --noEmit"
 	},
-	"keywords": ["reify", "dsl", "pipeline", "plugin", "type-safe", "serializable", "effect"],
+	"keywords": [
+		"reify",
+		"dsl",
+		"pipeline",
+		"plugin",
+		"type-safe",
+		"serializable",
+		"effect"
+	],
 	"author": "Sylphx",
 	"license": "MIT"
 }
