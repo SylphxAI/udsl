@@ -1,0 +1,43 @@
+{
+	"name": "@sylphx/udsl",
+	"version": "0.1.0",
+	"description": "Universal DSL - Language-agnostic, serializable expression language for building data pipelines",
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsc",
+		"test": "bun test",
+		"typecheck": "tsc --noEmit",
+		"lint": "biome check .",
+		"format": "biome format --write .",
+		"prepublishOnly": "echo 'Use CI to publish' && exit 1"
+	},
+	"keywords": [
+		"dsl",
+		"json",
+		"serializable",
+		"expression-language",
+		"cross-language",
+		"pipeline",
+		"type-safe"
+	],
+	"author": "Sylphx",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/SylphxAI/udsl.git"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@types/bun": "^1.2.17",
+		"typescript": "^5.8.3"
+	}
+}
