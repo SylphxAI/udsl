@@ -103,3 +103,16 @@ export {
 
 export { entityPlugin } from "./plugins/index";
 export type { CreateArgs, UpdateArgs, DeleteArgs, UpsertArgs } from "./plugins/index";
+
+// =============================================================================
+// Adapters
+// =============================================================================
+
+export {
+	createPrismaPlugin,
+	createCachePlugin,
+	type PrismaLike,
+	type PrismaPluginOptions,
+	type CacheLike,
+	type CachePluginOptions,
+} from "./adapters/index";

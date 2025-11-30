@@ -114,18 +114,91 @@ const dsl = pipe(({ input }) => [
 
 ### Built-in Plugins
 
-#### Entity Plugin
+#### Entity Plugin (Descriptive)
+
+Returns operation descriptions. Use for defining what to do:
 
 ```typescript
 import { entityPlugin, registerPlugin } from '@sylphx/udsl';
 
 registerPlugin(entityPlugin);
 
-// Available effects:
-// - entity.create
-// - entity.update
-// - entity.delete
-// - entity.upsert
+// Available effects: entity.create, entity.update, entity.delete, entity.upsert
+```
+
+### Adapters (Execution)
+
+Pre-built plugins that actually execute effects:
+
+#### Prisma Adapter
+
+```typescript
+import { PrismaClient } from "@prisma/client";
+import { createPrismaPlugin, registerPlugin, execute, pipe, entity } from '@sylphx/udsl';
+
+const prisma = new PrismaClient();
+registerPlugin(createPrismaPlugin(prisma));
+
+const dsl = pipe(({ input }) => [
+  entity.create("User", { name: input.name, email: input.email }).as("user"),
+]);
+
+// Actually creates in database
+const result = await execute(dsl, { name: "John", email: "john@example.com" });
+console.log(result.result.user); // { id: "...", name: "John", email: "..." }
+```
+
+#### Cache Adapter
+
+For client-side optimistic updates:
+
+```typescript
+import { createCachePlugin, registerPlugin, execute, pipe, entity, inc } from '@sylphx/udsl';
+
+const cache = new Map();
+registerPlugin(createCachePlugin(cache));
+
+const dsl = pipe(({ input }) => [
+  entity.create("User", { name: input.name }).as("user"),
+  entity.update("User", { id: ref("user").id, loginCount: inc(1) }).as("updated"),
+]);
+
+// Updates cache immediately (optimistic)
+await execute(dsl, { name: "John" });
+console.log(cache.get("User:temp_1")); // { id: "temp_1", name: "John", loginCount: 1 }
+```
+
+### Writing Custom Plugins
+
+```typescript
+import { registerPlugin, type Plugin } from '@sylphx/udsl';
+
+const myPlugin: Plugin = {
+  namespace: "myservice",
+  effects: {
+    // Sync effect
+    validate: (args, ctx) => {
+      const data = ctx.resolve(args.data);
+      if (!data.email) throw new Error("Email required");
+      return { valid: true };
+    },
+
+    // Async effect
+    send: async (args, ctx) => {
+      const email = ctx.resolve(args.email);
+      await sendEmail(email);
+      return { sent: true };
+    },
+  },
+};
+
+registerPlugin(myPlugin);
+
+// Use in pipeline
+const dsl = pipe(({ input }) => [
+  op("myservice.validate", { data: input }).as("validation"),
+  op("myservice.send", { email: input.email }).as("email").only(ref("validation").valid),
+]);
 ```
 
 ## Conditional Execution
