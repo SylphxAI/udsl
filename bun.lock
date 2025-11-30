@@ -33,7 +33,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@sylphx/reify-core": "workspace:*",
-        "@sylphx/standard-entity": "github:SylphxAI/standard-entity",
+        "@sylphx/standard-entity": "^0.1.0",
       },
     },
     "packages/reify": {
@@ -76,7 +76,7 @@
 
     "@sylphx/reify-entity": ["@sylphx/reify-entity@workspace:packages/entity"],
 
-    "@sylphx/standard-entity": ["@sylphx/standard-entity@github:SylphxAI/standard-entity#fe254c0", {}, "SylphxAI-standard-entity-fe254c0"],
+    "@sylphx/standard-entity": ["@sylphx/standard-entity@0.1.0", "", {}, "sha512-Qew99goKhGHIgS68VBbnyMbwpR3ZRzLEYWpZm7FBwRtWEYlohFmYhKzZDPLmE2LAV3ZbIHE/rvrLtV5ZAjRf/Q=="],
 
     "@types/bun": ["@types/bun@1.3.3", "", { "dependencies": { "bun-types": "1.3.3" } }, "sha512-ogrKbJ2X5N0kWLLFKeytG0eHDleBYtngtlbu9cyBKFtNL3cnpDZkNdQj8flVf6WTZUX5ulI9AY1oa7ljhSrp+g=="],
 
