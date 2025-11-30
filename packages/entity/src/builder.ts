@@ -24,9 +24,6 @@ export { isStandardEntity, type StandardEntity } from '@sylphx/standard-entity'
 // Type Inference Helpers
 // =============================================================================
 
-/** Extract entity name from StandardEntity or string */
-type _EntityName<T> = T extends StandardEntity<infer N, unknown> ? N : T extends string ? T : never
-
 /**
  * Infer scalar type from Lens field definition.
  * Supports common Lens field types.
