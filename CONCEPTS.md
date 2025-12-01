@@ -1,163 +1,324 @@
-# Reify - Concepts
+# Concepts
 
-> **Reify** = "Reified Operations" - 把操作變成 first-class data
+This document explores the foundational ideas behind Reify.
 
-## Core Philosophy
+---
 
-**"Describe once, execute anywhere"**
+## What is Reification?
 
-Reify 提供一個 **serializable DSL** 來描述操作。這個 DSL 可以：
-- 在定義時不執行，只是數據
-- 傳輸到任何地方（server → client）
-- 在目標環境用適當的 adapter 執行
+**Reification** is the act of making something abstract into something concrete.
 
-## Use Case: Optimistic Updates
+In philosophy, it means treating concepts as if they were real, tangible things. In programming, we extend this idea: **operations themselves become tangible objects**.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Server (定義)                                               │
-│                                                             │
-│  mutation()                                                 │
-│    .optimistic(pipeline)  ← Reify DSL (描述 optimistic)      │
-│    .resolve(...)          ← 真正的 DB 操作 (Prisma/SQL)       │
-│                                                             │
-│  Pipeline 是 serializable，可以傳給 client                    │
-└─────────────────────────────────────────────────────────────┘
-                         │
-                         │ Pipeline DSL (JSON) 傳到 client
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│  Client (執行)                                               │
-│                                                             │
-│  1. 收到 mutation 調用                                       │
-│  2. 從 server schema 拿到 optimistic pipeline                │
-│  3. 用 Reify execute() + createCachePlugin() 執行            │
-│  4. 立即更新 local cache (optimistic)                        │
-│  5. 同時發送請求到 server                                     │
-│  6. Server 返回真實數據 → 更新 cache                          │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## What Reify IS
-
-- ✅ **DSL Builder**: `entity.create()`, `pipe()`, `branch()`, `ref()`, `temp()`...
-- ✅ **Serializable**: Pipeline 是 JSON，可以傳輸
-- ✅ **Plugin System**: 不同環境用不同 adapter 執行同一個 DSL
-- ✅ **Executor**: `execute()` 函數配合 plugin 執行 DSL
-
-## What Reify is NOT
-
-- ❌ **Not an ORM**: 不直接操作 DB
-- ❌ **Not a query builder**: 不是 Prisma/Drizzle 那種
-- ❌ **Not tied to any framework**: 獨立庫，可被任何框架使用
-
-## Relationship with Lens
-
-```
-Lens 用 Reify 就像 tRPC 用 Zod
-
-tRPC:
-  - 用 Zod 定義 input schema
-  - 內部用 zod.parse() 做 validation
-  - 用戶直接 import from 'zod'
-
-Lens:
-  - 用 Reify 定義 optimistic DSL
-  - 內部用 reify execute() 做 cache update
-  - 用戶直接 import from '@sylphx/reify'
-```
-
-Lens **不應該**：
-- ❌ Re-export Reify API
-- ❌ 改名 Reify 的東西
-- ❌ 包裝 Reify API
-
-Lens **應該**：
-- ✅ 接受 Reify pipeline 作為參數
-- ✅ 內部用 Reify 執行 optimistic updates
-- ✅ 用戶直接 import from `@sylphx/reify`
-
-## Package Structure
-
-```
-@sylphx/reify              ← Convenience re-export (用戶 import 這個)
-├── @sylphx/reify-core     ← Core: pipe, op, ref, temp, execute...
-├── @sylphx/reify-entity   ← Entity domain: entity.create/update/delete
-├── @sylphx/reify-adapter-cache   ← Cache adapter (for client)
-└── @sylphx/reify-adapter-prisma  ← Prisma adapter (optional, for server)
-```
-
-## DSL Example
+Consider a simple database write:
 
 ```typescript
-import { entity, pipe, temp, ref, now, branch, inc } from '@sylphx/reify';
+await db.user.create({ name: "Alice" });
+```
 
-// 定義 pipeline (純數據，不執行)
-const sendMessagePipeline = pipe(({ input }) => [
-  // Step 1: Upsert session
-  branch(input.sessionId)
-    .then(entity.update('Session', { id: input.sessionId }))
-    .else(entity.create('Session', { id: temp(), title: input.title }))
-    .as('session'),
+This operation executes and vanishes. It leaves behind an effect (a new row in the database), but the operation itself—the intent, the structure, the meaning—is gone forever.
 
-  // Step 2: Create message (ref session from step 1)
-  entity.create('Message', {
-    id: temp(),
-    sessionId: ref('session').id,
-    content: input.content,
-    createdAt: now(),
-  }).as('message'),
+Reify preserves it:
 
-  // Step 3: Update user stats
-  entity.update('User', {
-    id: input.userId,
-    messageCount: inc(1),
-  }).as('userStats'),
+```typescript
+const operation = entity.create("User", { name: "Alice" });
+// The operation exists as data
+// It can be inspected, stored, transmitted, transformed
+// And eventually, executed
+```
+
+---
+
+## The Three Layers
+
+Reify separates concerns into three distinct layers:
+
+```
+┌─────────────────────────────────────────────────────┐
+│                    BUILDER                          │
+│                                                     │
+│  Type-safe DSL for constructing operations          │
+│  pipe(), entity.create(), ref(), temp()...          │
+│                                                     │
+└─────────────────────┬───────────────────────────────┘
+                      │
+                      │  produces
+                      ▼
+┌─────────────────────────────────────────────────────┐
+│                    DATA                             │
+│                                                     │
+│  Plain JavaScript objects (JSON-serializable)       │
+│  The universal representation of operations         │
+│                                                     │
+└─────────────────────┬───────────────────────────────┘
+                      │
+                      │  consumed by
+                      ▼
+┌─────────────────────────────────────────────────────┐
+│                   EXECUTOR                          │
+│                                                     │
+│  Plugins that interpret and execute operations      │
+│  execute() + plugin system                          │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+### Builder Layer
+
+The builder provides a **type-safe, ergonomic interface** for constructing operations. It uses TypeScript's type system to ensure correctness at compile time.
+
+```typescript
+const op = entity.create("User", {
+  id: temp(),           // TypeScript knows this is a temp reference
+  name: input.name,     // TypeScript knows this references input
+  createdAt: now(),     // TypeScript knows this is a timestamp
+});
+```
+
+The builder doesn't execute anything. It produces data.
+
+### Data Layer
+
+The data layer is the **heart of Reify**. Operations exist as plain JavaScript objects that can be:
+
+- **Serialized**: `JSON.stringify(operation)`
+- **Stored**: Save to database, file, or any storage
+- **Transmitted**: Send over HTTP, WebSocket, message queue
+- **Inspected**: Log, debug, analyze
+- **Transformed**: Modify, filter, compose
+
+```typescript
+// An operation is just data
+{
+  "$do": "entity.create",
+  "$with": {
+    "type": "User",
+    "name": { "$input": "name" }
+  },
+  "$as": "user"
+}
+```
+
+This data is **environment-agnostic**. It doesn't know or care where it will be executed.
+
+### Executor Layer
+
+The executor **interprets** operation data and produces effects. Different executors (plugins) can interpret the same operation differently:
+
+```typescript
+// Same operation
+const op = entity.create("User", { name: "Alice" });
+
+// Different interpretations
+cachePlugin:  → Updates in-memory cache
+prismaPlugin: → Writes to database via Prisma
+logPlugin:    → Logs the operation
+mockPlugin:   → Returns mock data for testing
+```
+
+---
+
+## Data Representations
+
+### Value References
+
+Operations often need to reference dynamic values. Reify provides several reference types:
+
+| Reference | JSON Representation | Purpose |
+|-----------|---------------------|---------|
+| `input.field` | `{ "$input": "field" }` | Access input data |
+| `ref("step").field` | `{ "$ref": "step.field" }` | Reference previous result |
+| `temp()` | `{ "$temp": true }` | Generate temporary ID |
+| `now()` | `{ "$now": true }` | Current timestamp |
+
+### Operators
+
+Operators represent **atomic transformations** that can be applied during execution:
+
+| Operator | JSON Representation | Semantics |
+|----------|---------------------|-----------|
+| `inc(1)` | `{ "$inc": 1 }` | Add to current value |
+| `dec(1)` | `{ "$dec": 1 }` | Subtract from current value |
+| `push("x")` | `{ "$push": "x" }` | Append to array |
+| `pull("x")` | `{ "$pull": "x" }` | Remove from array |
+| `addToSet("x")` | `{ "$addToSet": "x" }` | Add if not present |
+
+### Conditionals
+
+Conditional logic is also represented as data:
+
+```typescript
+// Builder
+branch(input.exists)
+  .then(entity.update(...))
+  .else(entity.create(...))
+  .as("result")
+
+// Data
+{
+  "$when": { "$input": "exists" },
+  "$then": { "$do": "entity.update", ... },
+  "$else": { "$do": "entity.create", ... },
+  "$as": "result"
+}
+```
+
+---
+
+## Pipeline Execution
+
+A pipeline is a sequence of operations that may reference each other:
+
+```typescript
+const pipeline = pipe(({ input }) => [
+  entity.create("Order", { id: temp() }).as("order"),
+  entity.create("Item", { orderId: ref("order").id }).as("item"),
 ]);
-
-// Pipeline 是 JSON，可以 serialize
-console.log(JSON.stringify(sendMessagePipeline));
 ```
 
-## Execution
+Execution proceeds **sequentially**, building up a context of results:
+
+```
+Step 1: Execute "order" operation
+        → Result stored as ctx.refs["order"]
+
+Step 2: Execute "item" operation
+        → ref("order").id resolved from ctx.refs["order"]
+        → Result stored as ctx.refs["item"]
+
+Final:  Return all step results
+```
+
+### Reference Resolution
+
+Before each step executes, all references are resolved:
+
+1. `{ "$input": "field" }` → Look up in input data
+2. `{ "$ref": "step.field" }` → Look up in previous results
+3. `{ "$temp": true }` → Generate unique ID
+4. `{ "$now": true }` → Get current timestamp
+
+---
+
+## Plugin Architecture
+
+Plugins register **effect handlers** organized by namespace:
 
 ```typescript
-import { execute, createCachePlugin } from '@sylphx/reify';
+interface Plugin {
+  namespace: string;
+  effects: {
+    [effectName: string]: EffectHandler;
+  };
+}
 
-// Client side: 用 cache adapter 執行
-const cachePlugin = createCachePlugin(localCache);
-const result = await execute(pipeline, { input }, [cachePlugin]);
-
-// 結果包含每個 step 的 output
-// result.session, result.message, result.userStats
+type EffectHandler = (args: unknown, ctx: ExecutionContext) => Promise<unknown>;
 ```
 
-## Key Concepts
+### Example Plugin
 
-### 1. Pipeline
-一系列有序的操作步驟，可以互相引用結果。
+```typescript
+const entityPlugin = {
+  namespace: "entity",
+  effects: {
+    create: async (args, ctx) => {
+      // args = { type: "User", name: "Alice", ... }
+      // Return whatever makes sense for this environment
+      return { ...args, id: generateId() };
+    },
+    update: async (args, ctx) => { ... },
+    delete: async (args, ctx) => { ... },
+  },
+};
+```
 
-### 2. Operation
-單個操作，如 `entity.create('User', {...})`。
+### Effect Resolution
 
-### 3. References
-- `input.field` - 引用 mutation input
-- `ref('step').field` - 引用前面步驟的結果
-- `temp()` - 生成臨時 ID
-- `now()` - 當前時間戳
+When an operation like `entity.create` executes:
 
-### 4. Operators
-- `inc(n)` - 遞增
-- `dec(n)` - 遞減
-- `push(item)` - 添加到數組
-- `pull(item)` - 從數組移除
-- `addToSet(item)` - 唯一添加
+1. Parse effect name: `"entity.create"` → namespace `"entity"`, effect `"create"`
+2. Find plugin with matching namespace
+3. Call the effect handler with resolved arguments
+4. Store result for potential reference by later steps
 
-### 5. Conditional
-- `branch(condition).then(op).else(op)` - 條件操作
-- `when(condition, value)` - 條件值
+---
 
-### 6. Plugin
-Adapter that knows how to execute operations in a specific environment:
-- `createCachePlugin(cache)` - 執行對 cache 的操作
-- `createPrismaPlugin(prisma)` - 執行對 Prisma 的操作
+## Design Decisions
+
+### Why Data, Not Functions?
+
+Functions are opaque. You cannot inspect what a function will do without executing it. Data is transparent—you can examine, transform, and reason about it.
+
+```typescript
+// Function: opaque
+const fn = () => db.user.create({ name: "Alice" });
+// What does this do? We must execute to find out.
+
+// Data: transparent
+const op = { type: "create", entity: "User", data: { name: "Alice" } };
+// We can inspect, validate, transform before execution.
+```
+
+### Why Plugins?
+
+Different environments have different capabilities and constraints:
+
+- **Browser**: No direct database access
+- **Server**: Full database access
+- **Test**: No real infrastructure
+- **Preview**: Dry-run, no side effects
+
+Plugins allow the same operation to adapt to its environment.
+
+### Why Sequential Execution?
+
+Operations in a pipeline often depend on each other. Sequential execution with reference resolution provides:
+
+1. **Predictability**: Operations execute in defined order
+2. **Composability**: Later operations can reference earlier results
+3. **Debuggability**: Each step can be inspected independently
+
+---
+
+## Comparison
+
+### vs. Redux Actions
+
+Redux actions are also "operations as data," but:
+
+- Redux actions describe **state transitions**, Reify describes **effects**
+- Redux requires a central store, Reify is store-agnostic
+- Redux reducers are synchronous, Reify handlers are async
+
+### vs. GraphQL Mutations
+
+GraphQL mutations describe operations, but:
+
+- GraphQL is tied to a schema and server
+- Reify is runtime and environment agnostic
+- Reify operations can execute anywhere, not just on a GraphQL server
+
+### vs. Event Sourcing
+
+Event sourcing stores events as the source of truth:
+
+- Events describe **what happened** (past)
+- Reify operations describe **what to do** (intent)
+- Reify can be used to implement event sourcing
+
+---
+
+## Summary
+
+Reify is built on a simple but powerful idea: **operations should be data**.
+
+This enables:
+
+- **Inspection**: See what will happen before it happens
+- **Storage**: Keep a record of all operations
+- **Transmission**: Send operations across boundaries
+- **Replay**: Re-execute operations from history
+- **Transformation**: Modify operations programmatically
+- **Portability**: Execute anywhere with appropriate plugins
+
+The separation into Builder → Data → Executor creates a clean architecture where each layer has a single responsibility, and the data layer serves as the universal interface between intent and execution.

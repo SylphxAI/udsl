@@ -1,7 +1,7 @@
 {
 	"name": "@sylphx/reify-adapter-prisma",
 	"version": "0.1.2",
-	"description": "Reify Prisma Adapter - Execute entity operations against Prisma",
+	"description": "Prisma database executor for Reify operations",
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",

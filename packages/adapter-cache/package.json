@@ -1,7 +1,7 @@
 {
 	"name": "@sylphx/reify-adapter-cache",
 	"version": "0.1.2",
-	"description": "Reify Cache Adapter - Execute entity operations against in-memory cache",
+	"description": "In-memory cache executor for Reify operations",
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",

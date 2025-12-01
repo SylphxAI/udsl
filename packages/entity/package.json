@@ -1,7 +1,7 @@
 {
 	"name": "@sylphx/reify-entity",
 	"version": "0.1.2",
-	"description": "Reify Entity Domain - CRUD operations for entities",
+	"description": "Entity operations for Reify - type-safe create, update, delete, upsert as data",
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",

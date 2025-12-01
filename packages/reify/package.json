@@ -1,7 +1,7 @@
 {
 	"name": "@sylphx/reify",
 	"version": "0.1.2",
-	"description": "Reify - Reified mutations with pluggable interpreters. Describe once, execute anywhere.",
+	"description": "Transform operations into first-class data. Inspect, store, transmit, and execute anywhere.",
 	"type": "module",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
